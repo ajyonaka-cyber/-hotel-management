@@ -40,7 +40,13 @@ public class SecurityConfig {
         );
 
         configuration.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                )
         );
 
         configuration.setAllowedHeaders(
@@ -50,13 +56,17 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
 
         return source;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http) throws Exception {
 
         http
                 .cors(cors -> {})
@@ -68,21 +78,34 @@ public class SecurityConfig {
                                 SessionCreationPolicy.STATELESS
                         )
                 )
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers(
+                                        "/api/auth/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs/**"
+                                ).permitAll()
 
-                        .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(
+                                        "/api/rooms/**"
+                                ).hasRole("ADMIN")
 
-                        .requestMatchers("/api/rooms/**")
-                        .hasRole("ADMIN")
+                                .requestMatchers(
+                                        "/api/customers/**"
+                                ).hasAnyRole(
+                                        "ADMIN",
+                                        "CUSTOMER"
+                                )
 
-                        .requestMatchers("/api/customers/**")
-                        .hasAnyRole("ADMIN", "CUSTOMER")
+                                .requestMatchers(
+                                        "/api/bookings/**"
+                                ).hasAnyRole(
+                                        "ADMIN",
+                                        "CUSTOMER"
+                                )
 
-                        .requestMatchers("/api/bookings/**")
-                        .hasAnyRole("ADMIN", "CUSTOMER")
-
-                        .anyRequest()
-                        .authenticated()
+                                .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(
