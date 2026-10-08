@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f7fb;
+}
+
+.app {
+  min-height: 100vh;
+  padding: 40px;
+  text-align: center;
+}
+
+.app h1 {
+  color: #1f3c88;
+  margin-bottom: 10px;
+}
+
+.app > p {
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 280px;
+  padding: 30px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  color: #1f3c88;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #666;
+}
